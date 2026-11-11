@@ -1,56 +1,112 @@
-# Welcome to your Expo app 👋
+# Hydration Reminder App 🥤
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+### Department of Statistics & Computer Science | University of Kelaniya
+**Academic Year:** 2024/2025 (Semester 2)  
+**Course:** Mobile Application Development  
+**Practical Tutorial 06:** Local Notifications & Tab Navigation in Expo  
+**Developer:** Punsala Lakshan  
 
-## Get started
+---
 
-1. Install dependencies
+## 📌 Project Overview
 
+**Hydration Reminder** is a cross-platform mobile application built using **React Native**, **Expo Router**, and **expo-notifications**. The application promotes healthy hydration habits by allowing users to schedule customizable, repeating local notifications at user-defined time intervals.
+
+The app demonstrates hardware-level feature integration, permission handling, foreground notification presentation, and multi-tab navigation.
+
+---
+
+## 🚀 Key Features & Concepts Implemented
+
+### 1. Local vs. Push (Remote) Notifications
+* **Local Notifications:** Triggered and managed directly on the user's device via `expo-notifications`. Does not require an external backend or push token servers (Firebase Cloud Messaging, APNs).
+* **Push (Remote) Notifications:** Dispatched from external servers over the internet to remote devices.
+
+### 2. Permissions Management
+* Operating systems require user consent to display notifications.
+* Handled on component mount using `Notifications.requestPermissionsAsync()` in accordance with the **Rules of Hooks** (placed at top-level inside `useEffect`).
+
+### 3. Foreground Notification Handling
+* By default, mobile operating systems suppress alert banners when the app is active in the foreground.
+* Configured globally in `app/_layout.tsx` using `Notifications.setNotificationHandler`:
+  ```typescript
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+  ```
+
+### 4. Scheduling & Canceling Alerts
+* **Scheduling:** Built using `Notifications.scheduleNotificationAsync` with `SchedulableTriggerInputTypes.TIME_INTERVAL` configured to repeat every specified number of minutes.
+* **Cancellation:** Previous alerts are cleared before scheduling new ones via `Notifications.cancelAllScheduledNotificationsAsync()`, preventing duplicate stacking. Reminders can also be stopped at any time.
+
+### 5. Multi-Tab Navigation (Expo Router)
+* Declarative bottom tab navigation implemented with `expo-router`:
+  * **Tab 1 - Reminder (`app/index.tsx`):** Custom message input, interval input (minutes), active/inactive status display, and Start/Stop controls.
+  * **Tab 2 - Tips (`app/tips.tsx`):** Educational information on hydration benefits (skin health, body temperature regulation, waste flushing, blood pressure maintenance).
+  * **Tab 3 - About (`app/about.tsx`):** Course, lab metadata, and developer attribution.
+
+---
+
+## 📁 Project Structure
+
+```
+HydrationReminder/
+├── app/
+│   ├── _layout.tsx         # Tab navigation configuration & foreground notification handler
+│   ├── index.tsx           # Reminder tab (scheduling logic, custom message, intervals)
+│   ├── tips.tsx            # Static educational hydration benefits tab
+│   └── about.tsx           # About tab with developer details
+├── Output_Screens/         # Saved screenshots demonstrating app functionality
+├── assets/                 # App icons and splash assets
+├── app.json                # Expo application configuration
+├── package.json            # Project dependencies and scripts
+├── tsconfig.json           # TypeScript configuration
+└── README.md               # Lab documentation and instructions
+```
+
+---
+
+## 🛠️ Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd HydrationReminder
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. **Install Expo Notifications:**
    ```bash
-   npx expo start
+   npx expo install expo-notifications
    ```
 
-In the output, you'll find options to open the app in a
+4. **Start the development server with cache clearing:**
+   ```bash
+   npx expo start -c
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📱 Testing Instructions
 
-## Get a fresh project
+1. Open **Expo Go** on a physical Android or iOS device. (Emulators may fail to trigger notification UI or sounds properly).
+2. Scan the QR code displayed in the terminal.
+3. When prompted upon launch, allow notification permissions.
+4. Set the interval to `1` minute, optionally enter a custom message, and tap **START REMINDERS**.
+5. Switch to another tab or minimize the app to verify repeating local notifications arrive on schedule.
+6. Return to the app and tap **STOP REMINDERS** to cancel scheduled notifications.
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+## 📸 Output Screenshots
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Screenshots of the running application (Reminder tab, Tips tab, About tab, and Notification alerts) are stored in the [`Output_Screens/`](./Output_Screens) directory.
