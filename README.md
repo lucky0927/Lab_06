@@ -110,3 +110,4 @@ HydrationReminder/
 ## 📸 Output Screenshots
 
 Screenshots of the running application (Reminder tab, Tips tab, About tab, and Notification alerts) are stored in the [`Output_Screens/`](./Output_Screens) directory.
+# Lab_06
